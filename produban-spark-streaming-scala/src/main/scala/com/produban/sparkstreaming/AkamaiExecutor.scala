@@ -44,11 +44,11 @@ object AkamaiExecutor {
     if (SystemUtils.IS_OS_WINDOWS) {
       configuration = FilePropertiesUtil.getProperties(K.SYSTEM.CONFIG_FILE_WINDOWS)
     } else {
-      //      if (args(0).equals("VIRT")) {
-      //        configuration = FilePropertiesUtil.getProperties(K.SYSTEM.CONFIG_FILE_LINUX_VIRT)
-      //      } else {
+            if (args(0).equals("VIRT")) {
+              configuration = FilePropertiesUtil.getProperties(K.SYSTEM.CONFIG_FILE_LINUX_VIRT)
+            } else {
       configuration = FilePropertiesUtil.getProperties(K.SYSTEM.CONFIG_FILE_LINUX_PROD)
-      // }
+      }
 
     }
     return configuration

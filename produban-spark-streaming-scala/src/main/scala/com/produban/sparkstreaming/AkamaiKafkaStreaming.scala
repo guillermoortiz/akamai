@@ -23,6 +23,7 @@ import com.produban.indexer.api.Indexer
 import org.apache.spark.streaming.kafka.KafkaUtils
 import com.produban.akamai.api.AlertElastic
 import java.util.UUID
+import com.produban.api.data.Rule
 
 class AkamaiKafkaStreaming(indexer: Indexer) extends Serializable {
 
@@ -34,21 +35,21 @@ class AkamaiKafkaStreaming(indexer: Indexer) extends Serializable {
     val zookeeperNodes = configuration.getProperty(K.SYSTEM.PROPERTY_ZOOKEEPER_NODES)
     val topicsKafka = Map("flume-topic" -> 1)
 
-    println("XXXX 3")
-
     //If we want to configure mode and name with code, bad idea... better pass like configuration
     //val sparkConf = new SparkConf().setMaster(sparkMode).setAppName("MiApp");
-    val sparkConf = new SparkConf().setMaster(sparkMode).setAppName("MiApp");
+    val sparkConf = new SparkConf().setMaster(sparkMode);
     val ssc = new StreamingContext(sparkConf, Seconds(5));
     val lines = KafkaUtils.createStream(ssc, zookeeperNodes, "myGroup", topicsKafka)
 
-    println("XXXX 4")
-
-    ruleDoS(lines);
-    println("XXXX 4.1")
-    ruleSqlInjection(lines)
-
-    println("XXXX 5")
+    var rule = new Rule()
+    rule.setMessage("Alert SQL Injection")
+    rule.setNumberTimes(3)
+    rule.setRegex("SQL")
+    rule.setTotalTime(15)
+    rule.setWindowTime(5)
+    val rules = Array(rule)
+    
+    executeRules(lines, rules)
 
     // ssc.checkpoint(sparkCheckPoint)
     ssc.start()
@@ -56,85 +57,45 @@ class AkamaiKafkaStreaming(indexer: Indexer) extends Serializable {
 
   }
 
-  def ruleSqlInjection(lines: ReceiverInputDStream[(String, String)]) = {
+  def executeRules(lines: ReceiverInputDStream[(String, String)], rules: Array[Rule]) {
+    for (rule <- rules) {
+      val filterSql = lines.map(line => line._2).
+        filter(line => line.contains(rule.getRegex())).
+        map {
+          line =>
+            JsonUtil.read(line.getBytes(), classOf[Akamai])
+        }
 
-    //Get just the second parameter, filter with word SQL and parse to a object
-    val filterSql = lines.map(line => line._2).
-      filter(line => line.contains("SQL")).
-      map {
-        line =>
-          JsonUtil.read(line.getBytes(), classOf[Akamai])
+      val groupSql = filterSql.map {
+        json =>
+          val srcIp = json.getMessage().getCliIP()
+          val srcURL = json.getMessage().getReqHost()
+          (srcIp + "_" + srcURL, json)
       }
 
-    val groupSql = filterSql.map {
-      json =>
-        val srcIp = json.getMessage().getCliIP()
-        val srcURL = json.getMessage().getReqHost()
-        (srcIp + "_" + srcURL, json)
-    }
+      val errorLinesValueReduce = groupSql.groupByKeyAndWindow(Seconds(rule.getTotalTime()), Seconds(rule.getWindowTime()));
+      errorLinesValueReduce.foreachRDD {
+        rdd =>
+          val elem1 = rdd.take(1)
 
-    //val errorLinesValueReduce = groupSql.groupByKeyAndWindow(Seconds(60), Seconds(15))
-    val errorLinesValueReduce = groupSql.groupByKeyAndWindow(Seconds(15), Seconds(5));
-    errorLinesValueReduce.foreachRDD {
-      rdd =>
-        val elem1 = rdd.take(1)
+          if (elem1.size > 0) {
 
-        if (elem1.size > 0) {
-
-          val alertsAkamai = elem1(0)._2
-          if (alertsAkamai.size > 2) {
-            //Todos los logs en un array de elementos dentro de Alert
-            //indexer.indexJson(createAlert("Alert DoS", alertsAkamai.toList))  
-            indexer.indexJsons(createAlert("Alert SQL Injection", alertsAkamai.toList))
-            println("indexed sql")
+            val alertsAkamai = elem1(0)._2
+            if (alertsAkamai.size > rule.getNumberTimes()) {
+              //Todos los logs en un array de elementos dentro de AlertS   
+              val jsonsToIndex = createAlert(rule.getMessage(), alertsAkamai.toList)
+              indexer.indexJsons(jsonsToIndex)
+            }
           }
-        }
-    }
-  }
-
-  def ruleDoS(lines: ReceiverInputDStream[(String, String)]) = {
-
-    //Get just the second parameter, filter with word SQL and parse to a object
-    val messagesFiltered = lines.map(line => line._2).
-      filter(line => line.contains("BURST") || line.contains("SUMMARY")).
-      map(line => JsonUtil.read(line.getBytes(), classOf[Akamai]))
-
-    val groupDoS = messagesFiltered.map {
-      json =>
-        val srcIp = json.getMessage().getCliIP()
-        val srcURL = json.getMessage().getReqHost()
-        (srcIp + "_" + srcURL, json)
-    }
-    val errorLinesValueReduce = groupDoS.groupByKeyAndWindow(Seconds(180), Seconds(15))
-    //TODO optimizar esto para no abrir cada vez la conexion con Elastic
-    errorLinesValueReduce.foreachRDD {
-      rdd =>
-        val elem1 = rdd.take(1)
-
-        if (elem1.size > 0) {
-          val alertsAkamai = elem1(0)._2
-          if (alertsAkamai.size > 2) {
-            //Todos los logs en un array de elementos dentro de Alert
-            //indexer.indexJson(createAlert("Alert DoS", alertsAkamai.toList))            
-            indexer.indexJsons(createAlert("Alert DoS", alertsAkamai.toList))
-            println("indexed DoS")
-          }
-        }
+      }
     }
   }
 
   private def createAlert(message: String, jsonsDetected: List[Akamai]): Array[String] = {
-    //Version with array
-    //    val alert: Alert = new Alert("Alert SQL Injection", jsonsDetected.toArray)       
-    //    val jsonToElastic = JsonUtil.write(alert)
-    //    println(jsonToElastic)
-    //    return jsonToElastic
-
     val idUUID = UUID.randomUUID().toString()
     var alertJsons: Array[String] = new Array[String](jsonsDetected.size)
-    var index = 0
     for (index <- 0 until jsonsDetected.size) {
-      val alert: AlertElastic = new AlertElastic(idUUID, "Alert SQL Injection", jsonsDetected(index))
+      val alert: AlertElastic = new AlertElastic(idUUID, message, jsonsDetected(index))
       alertJsons(index) = JsonUtil.write(alert)
     }
 

@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.produban.core</groupId>
+		<artifactId>produban-parent</artifactId>
+		<version>1.00-SNAPSHOT</version>
+		<relativePath>../produban-parent</relativePath>		
+	</parent>
+	<groupId>com.produban.core</groupId>
+	<artifactId>produban-indexer</artifactId>
+	<version>${produban.version}</version>	
+	<name>Module (Elastic, Solr) with Indexer </name>
+	
+
+	<dependencies>		
+		<dependency>
+			<groupId>com.produban.core</groupId>
+			<artifactId>produban-util</artifactId>
+			<version>${produban.version}</version>
+		</dependency>
+	
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>${elasticserach.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>${elasticserach.version}</version>
+			 <exclusions>
+		        <exclusion>		     
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-lang</artifactId>						
+		        </exclusion>
+		    </exclusions>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<!-- <version>${mongodb.version}</version>-->
+			<version>2.12.4</version>
+		</dependency>
+				
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		
+		
+	</dependencies>
+</project>

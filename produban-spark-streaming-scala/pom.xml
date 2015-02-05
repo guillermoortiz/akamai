@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.produban.core</groupId>
+		<artifactId>produban-parent</artifactId>
+		<version>1.00-SNAPSHOT</version>
+		<relativePath>../produban-parent</relativePath>		
+	</parent>
+	<groupId>com.produban.core</groupId>
+	<artifactId>produban-spark-streaming-scala</artifactId>
+	<version>${produban.version}</version>	
+	<name>Module (Spark-Scala) Streaming </name>
+	
+
+	<dependencies>		
+		<dependency>
+			<groupId>com.produban.core</groupId>
+			<artifactId>produban-util</artifactId>
+			<version>${produban.version}</version>			
+		</dependency>
+		
+		<dependency>
+			<groupId>com.produban.core</groupId>
+			<artifactId>produban-akamai-api</artifactId>
+			<version>${produban.version}</version>			
+		</dependency>
+		
+		<dependency>
+			<groupId>com.produban.core</groupId>
+			<artifactId>produban-api</artifactId>
+			<version>${produban.version}</version>			
+		</dependency>
+		
+		<dependency>
+			<groupId>com.produban.core</groupId>
+			<artifactId>produban-indexer</artifactId>
+			<version>${produban.version}</version>			
+		</dependency>
+	
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming_2.10</artifactId>
+			<version>1.1.1</version>
+			<scope>provided</scope>	
+			 <exclusions>
+		        <exclusion>		     
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>							
+		        </exclusion>
+		        <exclusion>		     
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>					
+		        </exclusion>
+		      </exclusions> 		
+		</dependency>	
+		
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming-kafka_2.10</artifactId>
+			<version>1.1.1</version>
+			<scope>provided</scope>		
+			<exclusions>
+		        <exclusion>		     
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>							
+		        </exclusion>
+		        <exclusion>		     
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>					
+		        </exclusion>
+		      </exclusions> 		  	
+		</dependency>					
+	</dependencies>	
+	
+	<build>
+    <plugins>
+       <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <!-- goal>add-source</goal-->
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+	
+</project>

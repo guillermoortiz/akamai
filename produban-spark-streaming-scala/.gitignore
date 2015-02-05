@@ -1,0 +1,18 @@
+/bin
+/eclipse-classes
+
+
+######################
+# Eclipse
+######################
+ 
+.metadata
+.project
+*.tmp
+*.bak
+*.swp
+*~.nib
+.classpath
+.settings/
+/.externalToolBuilders
+/.cache

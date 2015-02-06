@@ -9,6 +9,6 @@ import com.produban.api.data.Rule;
  * @author ortizg1
  *
  */
-interface Rules {
+public interface RulesManager {
 	public List<Rule> getRules();
 }

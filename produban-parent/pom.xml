@@ -37,6 +37,8 @@
 		<module>../produban-indexer</module>		
 		<module>../produban-api</module>
 		<module>../produban-akamai-api</module>
+		<module>../produban-manager</module>
+		<module>../produban-data</module>
 	</modules>
 
 	<build>

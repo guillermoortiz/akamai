@@ -38,6 +38,7 @@ public interface K {
 		String PROPERTY_SPARKSTREAMING_CHECKPOINT = "produban.sparkstreaming.checkpoint";
 
 		String PROPERTY_ZOOKEEPER_NODES = "produban.zookeeper.nodes";
+		String PROPERTY_KAFKA_TOPICS = "produban.kafka.topics";
 
 	}
 

@@ -21,4 +21,13 @@ public class RulesManagerImpl implements RulesManager {
 		return rulesDAO.getRules();
 	}
 
+	public RulesDAO getRulesDAO() {
+		return rulesDAO;
+	}
+
+	public void setRulesDAO(RulesDAO rulesDAO) {
+		this.rulesDAO = rulesDAO;
+	}
+
+	
 }

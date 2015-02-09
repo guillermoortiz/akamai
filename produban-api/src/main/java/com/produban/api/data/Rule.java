@@ -17,6 +17,24 @@ public class Rule implements Serializable {
 	private long windowTime;
 	private String message;
 
+	
+	
+	
+	public Rule(String regex, int numberTimes, long totalTime, long windowTime,
+			String message) {
+		super();
+		this.regex = regex;
+		this.numberTimes = numberTimes;
+		this.totalTime = totalTime;
+		this.windowTime = windowTime;
+		this.message = message;
+	}
+
+	public Rule() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getRegex() {
 		return regex;
 	}

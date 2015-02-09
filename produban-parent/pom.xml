@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>3.2.3.RELEASE</spring.version>
+		<spring.version>4.0.2.RELEASE</spring.version>
 		<JR.version>0.8-4</JR.version>			
 		<slf4j.version>1.7.5</slf4j.version>
 		<cglib.version>2.2.2</cglib.version>
@@ -33,7 +33,7 @@
 		<module>../produban-util</module>
 		<module>../produban-injector</module>
 		<module>../produban-spark-streaming</module>
-		<module>../produban-spark-streaming-scala</module>
+		<!-- <module>../produban-spark-streaming-scala</module>-->
 		<module>../produban-indexer</module>		
 		<module>../produban-api</module>
 		<module>../produban-akamai-api</module>

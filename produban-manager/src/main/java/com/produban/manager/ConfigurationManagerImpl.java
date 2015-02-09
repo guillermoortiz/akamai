@@ -31,4 +31,11 @@ public class ConfigurationManagerImpl implements ConfigurationManager{
 		return configurationDAO.getConfiguration(key);
 	}
 
+	public ConfigurationDAO getConfigurationDAO() {
+		return configurationDAO;
+	}
+
+	public void setConfigurationDAO(ConfigurationDAO configurationDAO) {
+		this.configurationDAO = configurationDAO;
+	}	
 }

@@ -5,7 +5,6 @@
 		<groupId>com.produban.core</groupId>
 		<artifactId>produban-parent</artifactId>
 		<version>1.00-SNAPSHOT</version>
-		<relativePath>../produban-parent</relativePath>		
 	</parent>
 	<groupId>com.produban.core</groupId>
 	<artifactId>produban-akamai-api</artifactId>

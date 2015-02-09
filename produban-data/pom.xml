@@ -4,20 +4,35 @@
 	<parent>
 		<groupId>com.produban.core</groupId>
 		<artifactId>produban-parent</artifactId>
-		<version>1.00-SNAPSHOT</version>
-		<relativePath>../produban-parent</relativePath>		
+		<version>1.00-SNAPSHOT</version>	
 	</parent>
 	<groupId>com.produban.core</groupId>
 	<artifactId>produban-data</artifactId>
 	<version>${produban.version}</version>	
 	<name>Module Data to connect with the database </name>
 	
-
 	<dependencies>	
 		<dependency>
 			<groupId>com.produban.core</groupId>
 			<artifactId>produban-api</artifactId>
 			<version>${produban.version}</version>
-		</dependency>	
+		</dependency>
+		
+	    <!-- Spring framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+	 
+	    <!-- MySQL database driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>			
+		</dependency>
+
+	 
+			
 	</dependencies>
 </project>

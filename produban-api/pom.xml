@@ -4,8 +4,7 @@
 	<parent>
 		<groupId>com.produban.core</groupId>
 		<artifactId>produban-parent</artifactId>
-		<version>1.00-SNAPSHOT</version>
-		<relativePath>../produban-parent</relativePath>		
+		<version>1.00-SNAPSHOT</version>	
 	</parent>
 	<groupId>com.produban.core</groupId>
 	<artifactId>produban-api</artifactId>
@@ -38,12 +37,7 @@
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>${cglib.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<scope>provided</scope>
-		</dependency>
+		</dependency>	
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>

@@ -4,7 +4,17 @@ import java.io.Serializable;
 
 public class Configuration implements Serializable{
 	String key;
-	String value;
+	String value;	
+	
+	public Configuration() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Configuration(String key, String value) {
+		super();
+		this.key = key;
+		this.value = value;
+	}
 	public String getKey() {
 		return key;
 	}

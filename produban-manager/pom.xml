@@ -4,9 +4,9 @@
 	<parent>
 		<groupId>com.produban.core</groupId>
 		<artifactId>produban-parent</artifactId>
-		<version>1.00-SNAPSHOT</version>
-		<relativePath>../produban-parent</relativePath>		
-	</parent>
+		<version>1.00-SNAPSHOT</version>		
+	</parent>	
+	
 	<groupId>com.produban.core</groupId>
 	<artifactId>produban-manager</artifactId>
 	<version>${produban.version}</version>	

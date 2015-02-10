@@ -12,7 +12,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager{
 	ConfigurationDAO configurationDAO;
 	
 	@Override
-	public List<Configuration> getListConfigurations() {
+	public List<Configuration> getConfigurations() {
 		return configurationDAO.getListConfigurations();
 	}
 

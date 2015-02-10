@@ -6,7 +6,7 @@ import java.util.Map;
 import com.produban.api.data.Configuration;
 
 public interface ConfigurationManager {
-	public List<Configuration> getListConfigurations();
+	public List<Configuration> getConfigurations();
 	public Map<String, String> getMapConfigurations();
 	public Configuration getConfiguration(String key);
 }

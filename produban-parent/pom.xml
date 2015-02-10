@@ -39,6 +39,7 @@
 		<module>../produban-akamai-api</module>
 		<module>../produban-manager</module>
 		<module>../produban-data</module>
+		<module>../akamai-bin</module>
 	</modules>
 
 	<build>

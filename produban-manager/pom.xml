@@ -25,5 +25,6 @@
 			<artifactId>produban-data</artifactId>
 			<version>${produban.version}</version>
 		</dependency>
+	
 	</dependencies>
 </project>

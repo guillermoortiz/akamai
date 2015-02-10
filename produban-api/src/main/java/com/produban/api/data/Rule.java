@@ -13,26 +13,22 @@ import java.io.Serializable;
 public class Rule implements Serializable {
 	private String regex;
 	private int numberTimes;
-	private long totalTime;
-	private long windowTime;
+	private long window;
+	private long slideWindow;
 	private String message;
 
-	
-	
-	
-	public Rule(String regex, int numberTimes, long totalTime, long windowTime,
+	public Rule(String regex, int numberTimes, long window, long slideWindow,
 			String message) {
 		super();
 		this.regex = regex;
 		this.numberTimes = numberTimes;
-		this.totalTime = totalTime;
-		this.windowTime = windowTime;
+		this.window = window;
+		this.slideWindow = slideWindow;
 		this.message = message;
 	}
 
 	public Rule() {
-		super();
-		// TODO Auto-generated constructor stub
+		super();		
 	}
 
 	public String getRegex() {
@@ -51,22 +47,22 @@ public class Rule implements Serializable {
 		this.numberTimes = numberTimes;
 	}
 
-	
-	public long getTotalTime() {
-		return totalTime;
+	public long getWindow() {
+		return window;
 	}
 
-	public void setTotalTime(long totalTime) {
-		this.totalTime = totalTime;
+	public void setWindow(long window) {
+		this.window = window;
 	}
 
-	public long getWindowTime() {
-		return windowTime;
+	public long getSlideWindow() {
+		return slideWindow;
 	}
 
-	public void setWindowTime(long windowTime) {
-		this.windowTime = windowTime;
+	public void setSlideWindow(long slideWindow) {
+		this.slideWindow = slideWindow;
 	}
+
 
 	public String getMessage() {
 		return message;

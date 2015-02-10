@@ -1,41 +1,61 @@
 package com.produban.starkstreaming;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.serializer.JavaDeserializationStream;
-import org.apache.spark.streaming.api.java.*;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.StorageLevels;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.streaming.Duration;
+import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaPairDStream;
+import org.apache.spark.streaming.api.java.JavaPairReceiverInputDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.kafka.KafkaUtils;
-import org.stringtemplate.v4.compiler.CodeGenerator.conditional_return;
 
 import scala.Tuple2;
 
+import com.google.common.collect.Lists;
 import com.produban.akamai.entity.Akamai;
 import com.produban.api.data.Rule;
 import com.produban.api.general.K;
-import com.produban.api.manager.ConfigurationManager;
-import com.produban.api.manager.RulesManager;
 import com.produban.util.JsonUtil;
 
-public class AkamaiKafkaStreaming {
-	Map<String, String> configurations;
-	List<Rule> rules;
+public class AkamaiKafkaStreaming implements Serializable {
+	HashMap<String, String> configurations;
+	ArrayList<Rule> rules;
 
-	private void config() {
-
+	public AkamaiKafkaStreaming(HashMap<String, String> configurations,
+			ArrayList<Rule> rules) {
+		super();
+		this.configurations = configurations;
+		this.rules = rules;
 	}
 
-	public void executeRules(
+	public AkamaiKafkaStreaming() {
+		super();
+	}
+
+	public void startStreaming() {
+		Duration batchDuration = new Duration(5000);
+		SparkConf conf = new SparkConf().setMaster("local[2]")
+				.setAppName("App");
+		JavaStreamingContext ssc = new JavaStreamingContext(conf, batchDuration);
+
+		JavaPairReceiverInputDStream<String, String> pair = KafkaUtils
+				.createStream(ssc, getZookeeperNodes(), "myGroup",
+						getKafkaTopics());
+		executeRules(pair);
+
+		ssc.start();
+		ssc.awaitTermination();
+	}
+
+	private void executeRules(
 			final JavaPairReceiverInputDStream<String, String> streaming) {
 
 		for (final Rule rule : rules) {
@@ -48,6 +68,7 @@ public class AkamaiKafkaStreaming {
 						}
 					});
 
+			// bodyKafka.print();
 			JavaDStream<String> filteredLines = bodyKafka
 					.filter(new Function<String, Boolean>() {
 						@Override
@@ -74,46 +95,41 @@ public class AkamaiKafkaStreaming {
 							String srcIp = jsonAkamai.getMessage().getCliIP();
 							String srcURL = jsonAkamai.getMessage()
 									.getReqHost();
-							Tuple2 tuple = new Tuple2<String, Akamai>(srcIp
+							Tuple2<String, Akamai> tuple = new Tuple2<String, Akamai>(srcIp
 									+ "_" + srcURL, jsonAkamai);
 							return tuple;
 						}
 					});
-			org.apache.spark.streaming.Duration window = new org.apache.spark.streaming.Duration(
-					rule.getTotalTime());
-			org.apache.spark.streaming.Duration slideDuration = new org.apache.spark.streaming.Duration(
-					rule.getWindowTime());
+			
+			 Duration window = new Duration(rule.getWindow());
+			 Duration slideDuration = new Duration(rule.getSlideWindow());			
 			JavaPairDStream<String, Iterable<Akamai>> tupleStreaming = tuplesAkamai
 					.groupByKeyAndWindow(window, slideDuration);
 
-			tuplesAkamai.foreachRDD(new Function<JavaPairRDD<String,Akamai>, Void>() {
+			tupleStreaming
+					.foreachRDD(new Function<JavaPairRDD<String, Iterable<Akamai>>, Void>() {
+						@Override
+						public Void call(
+								JavaPairRDD<String, Iterable<Akamai>> rdd)
+								throws Exception {
 
-				@Override
-				public Void call(JavaPairRDD<String, Akamai> v1)
-						throws Exception {
-					// TODO Auto-generated method stub
-					return null;
-				}
-			});
-			
-			// val errorLinesValueReduce =
-			// groupSql.groupByKeyAndWindow(Seconds(rule.getTotalTime()),
-			// Seconds(rule.getWindowTime()));
-			// errorLinesValueReduce.foreachRDD {
-			// rdd =>
-			// val elem1 = rdd.take(1)
-			//
-			// if (elem1.size > 0) {
-			//
-			// val alertsAkamai = elem1(0)._2
-			// if (alertsAkamai.size > rule.getNumberTimes()) {
-			// //Todos los logs en un array de elementos dentro de AlertS
-			// val jsonsToIndex = createAlert(rule.getMessage(),
-			// alertsAkamai.toList)
-			// indexer.indexJsons(jsonsToIndex)
-			// }
-			// }
-			// }
+							List<Tuple2<String, Iterable<Akamai>>> elem = rdd
+									.take(1);
+
+							
+							if (elem.size() > 0) {
+								List elements =  Lists.newArrayList(elem.get(0)._2);
+								System.out.println("XXXX Elemento tamaño:"
+										+ elements.size());									
+								if (2 <= elements.size()) {
+									System.out.println("XXX ALERTA "
+											+ rule.getMessage() + " GENERADA");
+								}
+							}
+
+							return null;
+						}
+					});			
 		}
 	}
 
@@ -130,18 +146,8 @@ public class AkamaiKafkaStreaming {
 	}
 
 	public Map<String, Integer> getKafkaTopics() {
-		return new HashMap<String, Integer>();
-	}
-
-	public static void main(String[] args) {
-		AkamaiKafkaStreaming akamai = new AkamaiKafkaStreaming();
-
-		SparkConf conf = new SparkConf().setAppName("");
-		JavaStreamingContext ssc = null;
-		JavaPairReceiverInputDStream<String, String> pair = KafkaUtils
-				.createStream(ssc, akamai.getZookeeperNodes(), "",
-						akamai.getKafkaTopics());
-		akamai.executeRules(pair);
-
+		Map<String, Integer> map = new HashMap<>();
+		map.put("flume-topic", 1);
+		return map;
 	}
 }

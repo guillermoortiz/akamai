@@ -27,7 +27,7 @@ public class ConfigurationManagerTest {
 	        System.out.println(this.getClass().getName() + ".listConfiguration");
 	        
 	        ConfigurationManager manager = Factory.getConfigurationManager();
-	        List<Configuration> configurations = manager.getListConfigurations();	        
+	        List<Configuration> configurations = manager.getConfigurations();	        
 	        
 	        assertTrue("Incorrect number configurations", configurations.size() > 0);
 	    }

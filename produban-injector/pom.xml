@@ -9,8 +9,7 @@
 	<groupId>com.produban.core</groupId>
 	<artifactId>produban-injector</artifactId>
 	<version>${produban.version}</version>	
-	<name>Module Injection</name>
-	
+	<name>Module Injection</name>	
 
 	<dependencies>
 		<dependency>

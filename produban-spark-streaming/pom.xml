@@ -12,12 +12,7 @@
 	<name>Module (Spark) Streaming </name>
 	
 
-	<dependencies>	
-		<dependency>
-			<groupId>com.produban.core</groupId>
-			<artifactId>produban-manager</artifactId>
-			<version>${produban.version}</version>
-		</dependency>
+	<dependencies>		
 		<dependency>
 			<groupId>com.produban.core</groupId>
 			<artifactId>produban-api</artifactId>

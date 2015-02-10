@@ -18,7 +18,7 @@ public class RulesDAOImpl implements RulesDAO{
 	private static final String TOTAL_TIME = "totalTime";
 	private static final String NUMBER_TIMES = "numberTimes";
 	private static final String REGEX = "regex";
-	private final static String QUERY_LIST_RULES = "SELECT * FROM RULES";
+	private final static String QUERY_LIST_RULES = "SELECT * FROM rules";
 	
 	private DataSource dataSource;	
 	

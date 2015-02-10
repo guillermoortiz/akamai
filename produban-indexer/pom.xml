@@ -9,7 +9,7 @@
 	<groupId>com.produban.core</groupId>
 	<artifactId>produban-indexer</artifactId>
 	<version>${produban.version}</version>	
-	<name>Module (Elastic, Solr) with Indexer </name>
+	<name>Module (Elastic, Solr, Mongo) with Indexer </name>
 	
 
 	<dependencies>		

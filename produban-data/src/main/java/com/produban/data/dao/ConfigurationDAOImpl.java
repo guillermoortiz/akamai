@@ -16,8 +16,8 @@ import com.produban.api.data.Configuration;
 public class ConfigurationDAOImpl implements ConfigurationDAO{
 
 	private DataSource dataSource;
-	private final static String QUERY_GET_CONFIGURATION = "SELECT * FROM CONFIGURATION WHERE KEY = ?";
-	private final static String QUERY_LIST_CONFIGURATION = "SELECT * FROM CONFIGURATION";
+	private final static String QUERY_GET_CONFIGURATION = "SELECT * FROM configuration WHERE kei = ?";
+	private final static String QUERY_LIST_CONFIGURATION = "SELECT * FROM configuration";
 	
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
@@ -35,7 +35,7 @@ public class ConfigurationDAOImpl implements ConfigurationDAO{
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {				
 				configuration = new Configuration(
-					rs.getString("key"),
+					rs.getString("kei"),
 					rs.getString("value")
 				);
 				configurations.add(configuration);

@@ -4,15 +4,19 @@
 	<parent>
 		<groupId>com.produban.core</groupId>
 		<artifactId>produban-parent</artifactId>
-		<version>1.00-SNAPSHOT</version>
-		<relativePath>../produban-parent</relativePath>		
+		<version>1.00-SNAPSHOT</version>		
 	</parent>
 	<groupId>com.produban.core</groupId>
-	<artifactId>produban-bin</artifactId>
+	<artifactId>produban-akamai-bin</artifactId>
 	<version>${produban.version}</version>
 	<name>Module Akamai Bin</name>
 
   <dependencies>
+ 	 <dependency>
+			<groupId>com.produban.core</groupId>
+			<artifactId>produban-manager</artifactId>
+			<version>${produban.version}</version>
+		</dependency>
   		<dependency>
 			<groupId>com.produban.core</groupId>
 			<artifactId>produban-util</artifactId>
@@ -32,13 +36,6 @@
 			<groupId>com.produban.core</groupId>
 			<artifactId>produban-spark-streaming</artifactId>
 			<version>${produban.version}</version>
-		</dependency>
-	
-	    <dependency>
-	      <groupId>junit</groupId>
-	      <artifactId>junit</artifactId>
-	      <version>3.8.1</version>
-	      <scope>test</scope>
-	    </dependency>
+		</dependency>	
   </dependencies>
 </project>

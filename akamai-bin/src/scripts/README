@@ -1,0 +1,11 @@
+If the script doesn't work because the format you could execute dos2unix akamaiStreaming.sh and give the permissons to execute.
+
+You need to create the next structure
+/user/etc/local/lib/ --> all the libraries of produban-akamai-bin after execute mvn clean install
+/user/etc/local/executor/ --> copy produban-akamai-bin.jar
+/user/etc/local/bin/ --> copy akamaiStreaming.sh
+
+You have to configure the database with the scripts CREATE_TABLE.sql and INSERT_AKAMAI.sql
+
+-Start zookeeper, elasticSearh, Flume and..
+./akamaiStreaming.sh, you could change some Spark parameters editing the script.

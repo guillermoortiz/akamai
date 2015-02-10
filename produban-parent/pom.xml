@@ -10,31 +10,31 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.0.2.RELEASE</spring.version>
-		<JR.version>0.8-4</JR.version>			
+		<JR.version>0.8-4</JR.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<cglib.version>2.2.2</cglib.version>
-		<commons-jexl.version>2.1.1</commons-jexl.version>		
+		<commons-jexl.version>2.1.1</commons-jexl.version>
 		<selenium.version>2.42.2</selenium.version>
 		<commons-configuration.version>1.6</commons-configuration.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<jackson.version>1.9.13</jackson.version>
-		<!--  <jackson.version>1.0.1</jackson.version>-->
+		<!-- <jackson.version>1.0.1</jackson.version> -->
 		<spark-streaming.version>1.1.1</spark-streaming.version>
 		<mongodb.version>2.12.4</mongodb.version>
 		<scala.version>2.10</scala.version>
-		<flume.version>1.5.2</flume.version>			
-		<elasticserach.version>1.4.1</elasticserach.version>					
+		<flume.version>1.5.2</flume.version>
+		<elasticserach.version>1.4.1</elasticserach.version>
 		<produban.version>1.00-SNAPSHOT</produban.version>
 		<downloadSources>true</downloadSources>
-		
+
 	</properties>
 
-	<modules>		
+	<modules>
 		<module>../produban-util</module>
 		<module>../produban-injector</module>
 		<module>../produban-spark-streaming</module>
-		<!-- <module>../produban-spark-streaming-scala</module>-->
-		<module>../produban-indexer</module>		
+		<!-- <module>../produban-spark-streaming-scala</module> -->
+		<module>../produban-indexer</module>
 		<module>../produban-api</module>
 		<module>../produban-akamai-api</module>
 		<module>../produban-manager</module>
@@ -86,42 +86,29 @@
 				</configuration>
 			</plugin>
 			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-dependency-plugin</artifactId>
-		        <version>2.9</version>
-		        <executions>
-		          <execution>
-		            <id>copy-dependencies</id>
-		            <phase>package</phase>
-		            <goals>
-		              <goal>copy-dependencies</goal>
-		            </goals>
-		            <configuration>
-		              <outputDirectory>${project.build.directory}/alternateLocation</outputDirectory>
-		              <overWriteReleases>false</overWriteReleases>
-		              <overWriteSnapshots>true</overWriteSnapshots>
-		              <overWriteIfNewer>true</overWriteIfNewer>
-		            </configuration>
-		          </execution>
-		        </executions>
-		      </plugin>
-		     <!--  <plugin>
-				  <groupId>org.apache.maven.plugins</groupId>
-				  <artifactId>maven-assembly-plugin</artifactId>
-				  <configuration>
-				    <descriptor>src/assembly/bin.xml</descriptor>
-				    <finalName>apache-maven-cookbook-${pom.version}</finalName>
-				  </configuration>
-				  <executions>
-				    <execution>
-				      <phase>package</phase>
-				      <goals>
-				        <goal>single</goal>
-				      </goals>
-				    </execution>
-				  </executions>
-				</plugin>
-				-->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/alternateLocation</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-assembly-plugin</artifactId> 
+				<configuration> <descriptor>src/assembly/bin.xml</descriptor> <finalName>apache-maven-cookbook-${pom.version}</finalName> 
+				</configuration> <executions> <execution> <phase>package</phase> <goals> 
+				<goal>single</goal> </goals> </execution> </executions> </plugin> -->
 		</plugins>
 
 		<pluginManagement>
@@ -171,7 +158,7 @@
 					<configuration>
 						<skip>true</skip>
 					</configuration>
-				</plugin>				
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
@@ -239,21 +226,10 @@
 
 	<dependencyManagement>
 		<dependencies>
-		<dependency>
+			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.4</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>				
-				<version>4.1.7.Final</version>
-				<exclusions>
-					<exclusion>
-						<groupId>antlr</groupId>
-						<artifactId>antlr</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>mysql</groupId>
@@ -270,18 +246,23 @@
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>4.3.5</version>
-			</dependency>				
-		
+			</dependency>
+
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.4</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
-				<version>2.6</version>			
-			</dependency>						
+				<version>2.6</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

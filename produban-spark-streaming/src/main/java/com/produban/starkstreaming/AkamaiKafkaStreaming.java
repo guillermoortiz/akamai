@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.Function;
@@ -19,7 +20,6 @@ import org.apache.spark.streaming.kafka.KafkaUtils;
 
 import scala.Tuple2;
 
-import com.google.common.collect.Lists;
 import com.produban.akamai.entity.Akamai;
 import com.produban.api.data.Rule;
 import com.produban.api.general.K;
@@ -118,9 +118,7 @@ public class AkamaiKafkaStreaming implements Serializable {
 
 							
 							if (elem.size() > 0) {
-								List elements =  Lists.newArrayList(elem.get(0)._2);
-								System.out.println("XXXX Elemento tamaño:"
-										+ elements.size());									
+								List elements =  IteratorUtils.toList(elem.get(0)._2.iterator());														
 								if (2 <= elements.size()) {
 									System.out.println("XXX ALERTA "
 											+ rule.getMessage() + " GENERADA");

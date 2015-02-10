@@ -13,9 +13,9 @@ import com.produban.api.data.Configuration;
 import com.produban.api.data.Rule;
 
 public class RulesDAOImpl implements RulesDAO{
-	private static final String MESSAGE2 = "message";
-	private static final String WINDOW_TIME = "windowTime";
-	private static final String TOTAL_TIME = "totalTime";
+	private static final String MESSAGE = "message";
+	private static final String SLIDE_WINDOW= "slideWindow";
+	private static final String WINDOW = "window";
 	private static final String NUMBER_TIMES = "numberTimes";
 	private static final String REGEX = "regex";
 	private final static String QUERY_LIST_RULES = "SELECT * FROM rules";
@@ -40,9 +40,9 @@ public class RulesDAOImpl implements RulesDAO{
 			while (rs.next()) {	
 				String regex = rs.getString(REGEX);
 				int numberTimes = rs.getInt(NUMBER_TIMES);
-				int totalTime = rs.getInt(TOTAL_TIME);
-				int windowTime = rs.getInt(WINDOW_TIME);
-				String message = rs.getString(MESSAGE2);
+				int totalTime = rs.getInt(WINDOW);
+				int windowTime = rs.getInt(SLIDE_WINDOW);
+				String message = rs.getString(MESSAGE);
 				rule = new Rule(regex, numberTimes, totalTime, windowTime, message);
 				rules.add(rule);
 			}
@@ -55,7 +55,9 @@ public class RulesDAOImpl implements RulesDAO{
 			if (conn != null) {
 				try {
 				conn.close();
-				} catch (SQLException e) {}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

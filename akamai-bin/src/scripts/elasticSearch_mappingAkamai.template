@@ -1,0 +1,110 @@
+#Change localhost for the IP, if you want to delete all the informacion in ES
+#You could execute "curl -XDELETE http://localhost:9200/_all"
+curl -XPOST http://localhost:9200/akamai -d '{
+	"settings" : {
+		"number_of_shards" : 1
+	},
+	"mappings" : {
+	"alerts" : {
+		"properties" : {
+			"type" : {"type" : "string"},
+			"date" : {"type" : "long"},			
+			"logs" : {
+				"type" : "nested",
+				"include_in_parent" : true,
+				"properties": {
+					"type" : {"type" : "string"},
+					"format" : {"type" : "string"},
+					"version" : {"type" : "string"},
+					"id" : {"type" : "string"},
+					"start" : {"type" : "string"},
+					"cp" : {"type" : "string"},			
+					"message" : {
+						"type" : "nested",
+						"include_in_parent" : true,
+						"properties": {
+							"proto" : {"type" : "string"},
+							"protoVer" : {"type" : "string"},
+							"status" : {"type" : "string"},
+							"cliIP" : {"type" : "string"},
+							"reqPort" : {"type" : "string"},
+							"reqHost" : {"type" : "string"},
+							"reqMethod" : {"type" : "string"},
+							"reqPath" : {"type" : "string"},
+							"reqQuery" : {"type" : "string"},
+							"respCT" : {"type" : "string"},
+							"bytes" : {"type" : "string"},
+							"ua" : {"type" : "string"},
+							"fwdHost" : {"type" : "string"}
+						}
+					},
+					"reqHdr" : {
+							"type" : "nested",
+							"include_in_parent" : true,
+							"properties": {
+								"accEnc" : {"type" : "string"},
+								"conn" : {"type" : "string"}			
+							}
+					},
+					"respHdr" : {
+							"type" : "nested",
+							"include_in_parent" : true,
+							"properties": {			
+								"conn" : {"type" : "string"},
+								"contEnc" : {"type" : "string"},
+								"contLang" : {"type" : "string"},
+								"date" : {"type" : "string"},
+								"vary" : {"type" : "string"},
+								"setCookie" : {"type" : "string"}			
+							}
+					},
+					"netPerf" : {
+							"type" : "nested",
+							"include_in_parent" : true,
+							"properties": {			
+								"lastMileRTT" : {"type" : "integer"},
+								"cacheStatus" : {"type" : "integer"},
+								"firstByte" : {"type" : "integer"},
+								"lastByte" : {"type" : "integer"},
+								"asnum" : {"type" : "integer"},
+								"edgeIP" : {"type" : "string"}			
+							}
+					},
+					"geo" : {
+							"type" : "nested",
+							"include_in_parent" : true,
+							"properties": {			
+								"country" : {"type" : "string"},
+								"region" : {"type" : "string"},
+								"city" : {"type" : "string"}			
+							}
+					},
+					"waf" : {
+							"type" : "nested",
+							"include_in_parent" : true,
+							"properties": {			
+								"ver" : {"type" : "string"},
+								"policy" : {"type" : "string"},
+								"ruleVer" : {"type" : "string"},
+								"mode" : {"type" : "string"},
+								"rsr" : {"type" : "string"},
+								"dor" : {"type" : "string"},
+								"oft" : {"type" : "string"},
+								"riskGroups" : {"type" : "string"},
+								"riskTuples" : {"type" : "string"},
+								"riskScores" : {"type" : "string"},
+								"pAction" : {"type" : "string"},
+								"pRate" : {"type" : "string"},
+								"warnRules" : {"type" : "string"},
+								"warnData" : {"type" : "string"},
+								"warnSlrs" : {"type" : "string"},
+								"denyRules" : {"type" : "string"},
+								"denyData" : {"type" : "string"}			
+							}
+					}
+				}
+			}
+		}
+	}
+	}
+}'

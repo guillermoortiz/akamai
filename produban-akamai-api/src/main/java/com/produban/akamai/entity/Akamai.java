@@ -209,7 +209,7 @@ public class Akamai implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "AkamaiJson [type=" + type + ", format=" + format + ", version="
+		return "Akamai [type=" + type + ", format=" + format + ", version="
 				+ version + ", id=" + id + ", start=" + start + ", cp=" + cp
 				+ ", message=" + message + ", reqHdr=" + reqHdr + ", respHdr="
 				+ respHdr + ", netPerf=" + netPerf + ", geo=" + geo + ", waf="

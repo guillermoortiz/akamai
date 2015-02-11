@@ -72,7 +72,7 @@ public class ElasticIndexer implements Indexer, Serializable {
 			sb.append(" Index:");
 			LOG.debug(sb.toString());
 		}
-
+System.out.println("XXX doc indexed");
 		LOG.info("Document indexed");
 		cleanup(client);
 	}

@@ -9,7 +9,7 @@ import com.produban.api.manager.ConfigurationManager;
 import com.produban.api.manager.RulesManager;
 import com.produban.starkstreaming.AkamaiKafkaStreaming;
 
-public class AkamaiBin {
+public class AkamaiJavaBin {
 	public static void main(String[] args) {
 		ConfigurationManager configurationManager = Factory
 				.getConfigurationManager();

@@ -20,20 +20,56 @@ import org.apache.spark.streaming.kafka.KafkaUtils;
 
 import scala.Tuple2;
 
+import com.produban.akamai.api.Alert;
 import com.produban.akamai.entity.Akamai;
 import com.produban.api.data.Rule;
 import com.produban.api.general.K;
+import com.produban.indexer.api.Indexer;
+import com.produban.indexer.elastic.ElasticIndexer;
+import com.produban.indexer.mongo.MongoIndexer;
 import com.produban.util.JsonUtil;
 
 public class AkamaiKafkaStreaming implements Serializable {
 	HashMap<String, String> configurations;
 	ArrayList<Rule> rules;
+	ArrayList<Indexer> indexers;
 
 	public AkamaiKafkaStreaming(HashMap<String, String> configurations,
 			ArrayList<Rule> rules) {
 		super();
 		this.configurations = configurations;
 		this.rules = rules;
+		initIndexers();
+	}
+	
+	private void initIndexers() {
+		indexers = new ArrayList<>();
+		String typeIndexer = configurations.get(K.SYSTEM.PROPERTY_INDEXER_TYPE);
+		if (typeIndexer.contains("elastic")){
+			indexers.add(initElasticSearch());
+		}
+		
+		if (typeIndexer.contains("mongo")){
+			indexers.add(initMongo());
+		}		
+	}
+
+	private Indexer initElasticSearch(){
+		Indexer indexer;
+		String clusterName = configurations.get(K.ELASTIC_SEARCH.PROPERTY_INDEXER_CLUSTER_NAME);
+		String indexName = configurations.get(K.ELASTIC_SEARCH.PROPERTY_INDEXER_INDEX_NAME);
+		String elasticNodes = configurations.get(K.ELASTIC_SEARCH.PROPERTY_INDEXER_NODES);
+		indexer = new ElasticIndexer(clusterName, indexName, "logs", elasticNodes);
+		return indexer;
+	}
+	
+	private Indexer initMongo(){
+		Indexer indexer;
+		String clusterName = configurations.get(K.MONGO.PROPERTY_INDEXER_MONGO_CLUSTER_NAME);
+		String mongoDb = configurations.get(K.MONGO.PROPERTY_INDEXER_MONGO_DB);
+		String collectionMongo = configurations.get(K.MONGO.PROPERTY_INDEXER_MONGO_COLLECTION);
+		indexer = new MongoIndexer(clusterName, mongoDb, collectionMongo);
+		return indexer;
 	}
 
 	public AkamaiKafkaStreaming() {
@@ -95,14 +131,14 @@ public class AkamaiKafkaStreaming implements Serializable {
 							String srcIp = jsonAkamai.getMessage().getCliIP();
 							String srcURL = jsonAkamai.getMessage()
 									.getReqHost();
-							Tuple2<String, Akamai> tuple = new Tuple2<String, Akamai>(srcIp
-									+ "_" + srcURL, jsonAkamai);
+							Tuple2<String, Akamai> tuple = new Tuple2<String, Akamai>(
+									srcIp + "_" + srcURL, jsonAkamai);
 							return tuple;
 						}
 					});
-			
-			 Duration window = new Duration(rule.getWindow());
-			 Duration slideDuration = new Duration(rule.getSlideWindow());			
+
+			Duration window = new Duration(rule.getWindow());
+			Duration slideDuration = new Duration(rule.getSlideWindow());
 			JavaPairDStream<String, Iterable<Akamai>> tupleStreaming = tuplesAkamai
 					.groupByKeyAndWindow(window, slideDuration);
 
@@ -116,20 +152,35 @@ public class AkamaiKafkaStreaming implements Serializable {
 							List<Tuple2<String, Iterable<Akamai>>> elem = rdd
 									.take(1);
 
-							
 							if (elem.size() > 0) {
-								List elements =  IteratorUtils.toList(elem.get(0)._2.iterator());														
-								if (2 <= elements.size()) {
-									System.out.println("XXX ALERTA "
-											+ rule.getMessage() + " GENERADA");
+								System.out.println("XXX elem " + elem.size());
+								List<Akamai> elements = IteratorUtils.toList(elem
+										.get(0)._2.iterator());
+								System.out.println("XXX elements " + elements.size());
+								if (rule.getNumberTimes() <= elements.size()) {
+									System.out.println("XXX insertando.. " + elements.size());
+									createAlert(rule.getMessage(),elements, indexers);
 								}
 							}
 
 							return null;
 						}
-					});			
+					});
 		}
 	}
+
+	private void createAlert(final String message,
+			final List<Akamai> jsonsDetected, final List<Indexer> Indexer) {
+		Akamai[] akamayArray = new Akamai[jsonsDetected.size()];
+		jsonsDetected.toArray(akamayArray);		
+		Alert alert = new Alert(message, akamayArray);
+		String jsonAlert = JsonUtil.write(alert);
+		
+		for (Indexer indexer : indexers){
+			indexer.indexJson(jsonAlert);
+		}
+	}
+
 
 	public Map<String, String> getConfigurations() {
 		return configurations;
@@ -140,7 +191,7 @@ public class AkamaiKafkaStreaming implements Serializable {
 	}
 
 	public String getZookeeperNodes() {
-		return configurations.get(K.SYSTEM.PROPERTY_ZOOKEEPER_NODES);
+		return configurations.get(K.KAFKA.PROPERTY_ZOOKEEPER_NODES);
 	}
 
 	public Map<String, Integer> getKafkaTopics() {

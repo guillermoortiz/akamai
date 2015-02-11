@@ -11,4 +11,4 @@ do
 	fi
 done
 
-spark-submit --name "Akamai Streaming" --master yarn-client --class com.produban.bin.AkamaiBin --jars $SPARK_CLASSPATH --executor-memory 1g /user/etc/executor/produban-akamai-bin.jar
+spark-submit --name "Akamai Streaming Java" --master yarn-client --class com.produban.bin.AkamaiJavaBin --jars $SPARK_CLASSPATH --executor-memory 1g /user/etc/executor/produban-akamai-bin.jar

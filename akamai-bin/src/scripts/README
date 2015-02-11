@@ -3,9 +3,12 @@ If the script doesn't work because the format you could execute dos2unix akamaiS
 You need to create the next structure
 /user/etc/lib/ --> all the libraries of produban-akamai-bin after execute mvn clean install
 /user/etc/executor/ --> copy produban-akamai-bin.jar
-/user/etc/bin/ --> copy akamaiStreaming.sh
+/user/etc/bin/ --> copy akamaiStreaming-java.sh or akamaiStreaming-scala.sh
 
 You have to configure the database with the scripts CREATE_TABLE.sql and INSERT_AKAMAI.sql
+Create the mapping to ES, you must execute the file elasticSeach_mappingAkamai.template
 
 -Start zookeeper, elasticSearh, Flume and..
 ./akamaiStreaming.sh, you could change some Spark parameters editing the script.
+
+NOTE, Scala is not integrated yet with the configuration in MySQL

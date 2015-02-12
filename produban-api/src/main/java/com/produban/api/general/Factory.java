@@ -20,7 +20,7 @@ public final class Factory {
 	static synchronized ApplicationContext getContext() {
 
 		if (context == null) {
-			String[] locations = { "produban-manager.xml", "produban-data.xml" };
+			String[] locations = { "produban-api.xml" , "produban-manager.xml", "produban-data.xml" };
 
 			ArrayList<String> available = new ArrayList<String>();
 			ClassLoader loader = Factory.class.getClassLoader();

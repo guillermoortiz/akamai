@@ -4,6 +4,7 @@ You need to create the next structure
 /user/etc/lib/ --> all the libraries of produban-akamai-bin after execute mvn clean install
 /user/etc/executor/ --> copy produban-akamai-bin.jar
 /user/etc/bin/ --> copy akamaiStreaming-java.sh or akamaiStreaming-scala.sh
+/user/etc/conf/ --> copy db_configuration.properties and edit with the right values to connect to the DB
 
 You have to configure the database with the scripts CREATE_TABLE.sql and INSERT_AKAMAI.sql
 Create the mapping to ES, you must execute the file elasticSeach_mappingAkamai.template

@@ -33,7 +33,7 @@
 		<module>../produban-util</module>
 		<module>../produban-injector</module>
 		<module>../produban-spark-streaming</module>
-		<!-- <module>../produban-spark-streaming-scala</module> -->
+		<module>../produban-spark-streaming-scala</module>
 		<module>../produban-indexer</module>
 		<module>../produban-api</module>
 		<module>../produban-akamai-api</module>

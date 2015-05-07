@@ -32,7 +32,7 @@ class AkamaiKafkaStreaming(indexer: Indexer) extends Serializable {
     val sparkPort = configuration.getProperty(K.SYSTEM.PROPERTY_SPARKSTREAMING_PORT)
     val sparkMode = configuration.getProperty(K.SYSTEM.PROPERTY_SPARKSTREAMING_MODE)
     val sparkCheckPoint = configuration.getProperty(K.SYSTEM.PROPERTY_SPARKSTREAMING_CHECKPOINT)
-    val zookeeperNodes = configuration.getProperty(K.SYSTEM.PROPERTY_ZOOKEEPER_NODES)
+    val zookeeperNodes = configuration.getProperty(K.KAFKA.PROPERTY_ZOOKEEPER_NODES)
     val topicsKafka = Map("flume-topic" -> 1)
 
     //If we want to configure mode and name with code, bad idea... better pass like configuration
@@ -45,8 +45,8 @@ class AkamaiKafkaStreaming(indexer: Indexer) extends Serializable {
     rule.setMessage("Alert SQL Injection")
     rule.setNumberTimes(3)
     rule.setRegex("SQL")
-    rule.setTotalTime(15)
-    rule.setWindowTime(5)
+    rule.setWindow(15)
+    rule.setSlideWindow(5)
     val rules = Array(rule)
     
     executeRules(lines, rules)
@@ -73,7 +73,7 @@ class AkamaiKafkaStreaming(indexer: Indexer) extends Serializable {
           (srcIp + "_" + srcURL, json)
       }
 
-      val errorLinesValueReduce = groupSql.groupByKeyAndWindow(Seconds(rule.getTotalTime()), Seconds(rule.getWindowTime()));
+      val errorLinesValueReduce = groupSql.groupByKeyAndWindow(Seconds(rule.getWindow()), Seconds(rule.getSlideWindow()));
       errorLinesValueReduce.foreachRDD {
         rdd =>
           val elem1 = rdd.take(1)

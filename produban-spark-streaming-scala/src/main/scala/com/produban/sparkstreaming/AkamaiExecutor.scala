@@ -25,15 +25,15 @@ object AkamaiExecutor {
     val typeIndexer = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_TYPE)
 
     if (typeIndexer.equals(K.INDEXER.TYPE_ELASTIC)) {
-      val nodesIndexer = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_NODES)
-      val clusterName = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_CLUSTER_NAME)
-      val indexName = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_INDEX_NAME)
+      val nodesIndexer = configuration.getProperty(K.ELASTIC_SEARCH.PROPERTY_INDEXER_NODES)
+      val clusterName = configuration.getProperty(K.ELASTIC_SEARCH.PROPERTY_INDEXER_CLUSTER_NAME)
+      val indexName = configuration.getProperty(K.ELASTIC_SEARCH.PROPERTY_INDEXER_INDEX_NAME)
       return new ElasticIndexer(clusterName, indexName, "alerts", nodesIndexer)
 
     } else {
-      val clusterName = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_MONGO_CLUSTER_NAME)
-      val mongoDB = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_MONGO_DB)
-      val collection = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_MONGO_COLLECTION)
+      val clusterName = configuration.getProperty(K.MONGO.PROPERTY_INDEXER_MONGO_CLUSTER_NAME)
+      val mongoDB = configuration.getProperty(K.MONGO.PROPERTY_INDEXER_MONGO_DB)
+      val collection = configuration.getProperty(K.MONGO.PROPERTY_INDEXER_MONGO_COLLECTION)
       return new MongoIndexer(clusterName, mongoDB, collection)
     }
 

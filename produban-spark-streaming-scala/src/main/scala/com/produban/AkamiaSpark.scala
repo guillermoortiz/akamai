@@ -29,9 +29,9 @@ object AkamiaSpark {
   }
 
   def executeRules(configuration: Properties) {
-    val nodesIndexer = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_NODES)
-    val clusterName = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_CLUSTER_NAME)
-    val indexName = configuration.getProperty(K.SYSTEM.PROPERTY_INDEXER_INDEX_NAME)
+    val nodesIndexer = configuration.getProperty(K.ELASTIC_SEARCH.PROPERTY_INDEXER_NODES)
+    val clusterName = configuration.getProperty(K.ELASTIC_SEARCH.PROPERTY_INDEXER_CLUSTER_NAME)
+    val indexName = configuration.getProperty(K.ELASTIC_SEARCH.PROPERTY_INDEXER_INDEX_NAME)
     val sparkPort = configuration.getProperty(K.SYSTEM.PROPERTY_SPARKSTREAMING_PORT)
     val sparkMode = configuration.getProperty(K.SYSTEM.PROPERTY_SPARKSTREAMING_MODE)
     val sparkCheckPoint = configuration.getProperty(K.SYSTEM.PROPERTY_SPARKSTREAMING_CHECKPOINT)
